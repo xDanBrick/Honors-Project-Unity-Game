@@ -1,51 +1,43 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class LevelGeneratorScript : MonoBehaviour {
 
 	[SerializeField] private GameObject platform;
-	[SerializeField] private GameObject gridSquare;
+	[SerializeField] private GameObject safeZone;
 	[SerializeField] [Range(1, 10)] private int difficulty;
-	[SerializeField] [Range(10, 30)] private int gridWidth = 20;
+	[SerializeField] [Range(40, 100)] private int gridWidth = 40;
 	[SerializeField] [Range(10, 30)] private int gridheight = 10;
-	[SerializeField] private float seed = 543.6673f;
-	float size;
+	[SerializeField] private float worldSeed = 5.2463f;
+	private const int maxJumpWidth = 10;
+	private Platform currentPlatform;
+
+	float gapScaler = 0.5f;
+	float platformScaler = 1.5f;
 	//length = 11 ( 7 - 11 ) ( 0 - 7 )
 	//height = 4  ( 1 - 4  ) ( 0 - 1 )
 	//highest with max length = 7
 	//futherest with max height = 1
 	// Use this for initialization
+
+	private class Platform
+	{
+		public Vector2 pos;
+		public int width;
+		public GameObject platform;
+		public Platform(Platform plat1, int posX, float seed)
+		{
+			platform = (GameObject)Instantiate (platform, new Vector3 ((float)posX, -3.0f, 0.0f), new Quaternion());
+			platform.GetComponent<PlatformScript> ().SetPlatform (seed, 8);
+			//Add that size to the increment
+			width += (int)platform.transform.localScale.x;
+		}
+	}
+
+
 	void Start () {
-		for (int i = 0; i < gridWidth; i++) {
-			for(int j = -3; j < gridheight - 3; j++)
-			{
-				//GameObject ob = (GameObject)Instantiate (gridSquare, new Vector3 ((float)i, (float)j, 0.0f), transform.rotation);
-
-			}
-		}
-		GameObject ob = (GameObject)Instantiate (gridSquare, new Vector3 (-2.0f, -3.0f, 0.0f), transform.rotation);
-		//GameObject ob4 = (GameObject)Instantiate (gridSquare, new Vector3 (9.0f, -2.0f, 0.0f), transform.rotation);
-		GameObject ob2 = (GameObject)Instantiate (gridSquare, new Vector3 (40.0f, -3.0f, 0.0f), transform.rotation);
-		bool isDone = false;
-		float startPoint = -1.0f;
-		float gapScaler = 90.0f;
-		while (!isDone) {
-			float x = Mathf.PerlinNoise (seed * -1.0f, 3747.0f);
-			if ((gapScaler - (x * 10.0f)) < 0.0f) {
-				GameObject plat = (GameObject)Instantiate (gridSquare, new Vector3 (startPoint, -3.0f, 0.0f), transform.rotation);
-				gapScaler -= 1.0f;
-
-			} 
-			else {
-				gapScaler = 1.0f;
-			}
-			startPoint += 1.0f;
-			if(startPoint > 38.0f)
-			{
-				isDone = true;
-			}
-		}
-
+		GenerateLevel ();
 	}
 	
 	// Update is called once per frame
@@ -53,30 +45,72 @@ public class LevelGeneratorScript : MonoBehaviour {
 	
 	}
 
-	private void GeneratePlatforms()
+	private void ScaleDifficulty()
 	{
-		float startX = -20.0f;
-		bool isDone = false;
-		int i = 1;
-		while(!isDone)
-		{
-			float x = 0.0f;
-			int width = Mathf.FloorToInt(x * 10.0f);
-			int widthScaler = 7 - width;
-			float distanceScaler = 15.0f - (float)widthScaler;
+		gapScaler += (0.1f * difficulty);
+		platformScaler -= (0.1f * difficulty);
+	}
+	
+	private void GeneratePlatforms(float levelSeed, int start, int end)
+	{
+		//For the size of the grid
+		int i = start + 5;
+		while (i < end) {
 
-			if (x < 0.5f) {
-				x *= 2.0f;
+			float platformSeed = Mathf.PerlinNoise ((float)i * levelSeed, 2.35f) * 10.0f;
+			//Place Platform
+			currentPlatform = new Platform(currentPlatform, i, platformSeed);
+			i += currentPlatform.width;
+			int gapSize = Mathf.CeilToInt (platformSeed * gapScaler);
+			if (gapSize > maxJumpWidth) 
+			{
+				//Minus 3 until it isnt
+				while (gapSize > maxJumpWidth) 
+				{
+					gapSize -= 3;
+				}
 			}
-			Debug.LogError (width);
-			GameObject plat = (GameObject)Instantiate (platform, new Vector3 (startX + (x*25.0f), -3.0f, 0.0f), transform.rotation);
-			plat.transform.localScale = new Vector3 ((float)width, plat.transform.localScale.y, plat.transform.localScale.z);
-			startX += (x * distanceScaler);
-			if (startX > 75.0f) {
-				isDone = true;
-			}
-			i++;
+			i += gapSize;
 		}
-		Instantiate (platform, new Vector3 (75.0f, -3.0f, 0.0f), transform.rotation);
+	}
+	public void GenerateLevel()
+	{
+		ScaleDifficulty ();
+		//Start
+		float levelSeed = GenerateLevelSeed(StaticVariables.LevelNumber());
+		GenerateSafeZone (new Vector2 (-5.0f, -3.0f), new Color (0.0f, 1.0f, 0.0f));
+		//currentPlatform = new Platform(NULL, 
+		//GeneratePlatforms (levelSeed, 0, 20);
+		int gridIncrement = 0;
+		while (gridIncrement < gridWidth) {
+			float gapSeed = Mathf.PerlinNoise ((float)gridIncrement * levelSeed, 73.4625f);
+			int gapSize = (30 + Mathf.CeilToInt (gapSeed * 10.0f));
+			gridIncrement += gapSize;
+			if (gridWidth < gridIncrement) {
+				gridIncrement = gridWidth;
+			} else {
+				GenerateSafeZone (new Vector2 (gridIncrement, -3.0f), new Color (1.0f, 1.0f, 0.0f));
+			}
+			GeneratePlatforms (gapSeed, gridIncrement - gapSize, gridIncrement);
+		}
+		//End
+		GenerateSafeZone (new Vector2 (gridWidth, -3.0f), new Color (0.0f, 1.0f, 0.0f));
+
+	}
+
+	private float GenerateLevelSeed(int levelNum)
+	{
+		float seed = worldSeed;
+		for (int i = 0; i < levelNum; i++) {
+			seed = Mathf.PerlinNoise (seed, 5.325f);
+		}
+		return seed;
+	}
+
+	void GenerateSafeZone(Vector2 position, Color color)
+	{
+		GameObject zone = (GameObject)Instantiate (safeZone, new Vector3 (position.x, position.y, 0.0f), transform.rotation);
+		zone.GetComponent<SafeZoneScript> ().SetColor (color);
 	}
 }
+

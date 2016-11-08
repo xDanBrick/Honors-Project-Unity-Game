@@ -46,6 +46,10 @@ namespace UnityStandardAssets._2D
 
             // Set the vertical animation
             m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
+
+			if (transform.position.y < -5.0f) {
+				transform.position = new Vector3 (StaticVariables.spawnX, 1.0f, 0.0f);
+			}
         }
 
 
