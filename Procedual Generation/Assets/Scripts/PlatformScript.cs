@@ -7,52 +7,64 @@ public class PlatformScript : MonoBehaviour {
 	
 	}
 
-	public void SetPlatform(float seed, int difficulty)
+	public float SetPlatform(float platformSeed, int difficulty, float start, float end)
 	{
-		float gapScaler = 0.5f + (0.1f * difficulty);
+		//Sets the platform scaler
 		float platformScaler = 1.5f - (0.1f * difficulty);
 
-		int size = Mathf.CeilToInt (seed * platformScaler);
-		transform.localScale = (new Vector3 ((float)size, 1.0f, 1.0f));
+		//Scales the platform
+		float size = platformSeed * platformScaler;
+		transform.localScale = (new Vector3 (size, 1.0f, 1.0f));
 
-		float platformSeed = seed;
-		bool loopComplete = false;
-		bool[] componentAdded = new bool[4];
+		//Adds an effect to the platform
+		AddComponents (platformSeed);
 
-		while (!loopComplete) {
-			if (platformSeed > 0.0f && platformSeed < 3.0f && !componentAdded[0]) 
-			{
-				gameObject.AddComponent<MoveObjectX> ();
-				componentAdded [0] = true;
-			} 
-			else if (platformSeed > 3.0f && platformSeed < 6.0f && !componentAdded[1])
-			{
-				gameObject.AddComponent<MoveObjectY> ();
-				componentAdded [1] = true;
-			} 
-			else if (platformSeed > 6.0f && platformSeed < 9.0f && !componentAdded[2]) {
-				//gameObject.AddComponent<MoveObjectX> ();
-				componentAdded [2] = true;
-			} 
-			else if (platformSeed > 9.0f && !componentAdded[3]) {
-				gameObject.AddComponent<SpinObject> ();
-				componentAdded [3] = true;
-			}
+		//Checks the edges of the platform by the last and end
+		CheckEdges(start, end);
 
-			if (platformSeed > 5.0f) {
-				loopComplete = true;
-				Debug.Log (platformSeed);
-			} 
-			else 
-			{
-				platformSeed = Mathf.PerlinNoise (platformSeed, 2.35f) * 10.0f;
-			}
+		//Return the x value of the right edge of the platform
+		return transform.position.x + (transform.localScale.x * 0.5f);
+	}
+
+	void AddComponents(float platformSeed)
+	{
+		if (platformSeed > 5.0f && platformSeed < 6.0f) 
+		{
+			gameObject.AddComponent<MoveObjectX> ();
+		} 
+		else if (platformSeed > 6.0f && platformSeed < 7.0f)
+		{
+			gameObject.AddComponent<MoveObjectY> ();
+		} 
+		else if (platformSeed > 7.0f && platformSeed < 8.0f) 
+		{
+			gameObject.AddComponent<DisapearOnTouch> ();
+		} 
+		else if (platformSeed > 8.0f) 
+		{
+			gameObject.AddComponent<SpinObject> ();
 		}
 	}
 
-	void ScaleDificulty(int difficulty)
+	void CheckEdges(float start, float end)
 	{
+		float halfScaleX = transform.localScale.x * 0.5f;
 
+		//If the platform is overlapping the last platform
+		if ((transform.position.x - halfScaleX) < start) 
+		{
+			float difference = start - (transform.position.x - halfScaleX) ;
+			transform.localScale = new Vector3 (transform.localScale.x - difference, transform.localScale.y, transform.localScale.z);
+			transform.position = new Vector3 (transform.position.x + (difference * 0.5f), transform.position.y, transform.position.z);
+		}
+
+		//If the platform is overlapping the end Platform
+		if ((transform.position.x + halfScaleX) > end) 
+		{
+			float difference = (transform.position.x + halfScaleX) - end;
+			transform.localScale = new Vector3 (transform.localScale.x - difference, transform.localScale.y, transform.localScale.z);
+			transform.position = new Vector3 (transform.position.x - (difference * 0.5f), transform.position.y, transform.position.z);
+		}
 	}
 
 	// Update is called once per frame

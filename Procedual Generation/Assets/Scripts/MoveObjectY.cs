@@ -15,8 +15,9 @@ public class MoveObjectY : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//Moves the platform Up and down
 		transform.position = new Vector3 (transform.position.x, transform.position.y + speed, transform.position.z);
-		if (transform.position.y > startY+ moveDistance || transform.position.y < startY ) {
+		if (transform.position.y > startY+ moveDistance || transform.position.y < startY) {
 			speed *= -1.0f;
 		} 
 	}

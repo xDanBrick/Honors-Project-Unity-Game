@@ -48,7 +48,7 @@ namespace UnityStandardAssets._2D
             m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
 
 			if (transform.position.y < -5.0f) {
-				transform.position = new Vector3 (StaticVariables.spawnX, 1.0f, 0.0f);
+				StaticVariables.LoadLevel (StaticVariables.LevelNumber ());
 			}
         }
 

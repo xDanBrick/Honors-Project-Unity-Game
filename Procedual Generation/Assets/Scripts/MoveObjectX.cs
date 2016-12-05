@@ -22,6 +22,7 @@ public class MoveObjectX : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		//Moves the platform right to left
 		transform.position = new Vector3 (transform.position.x + speed, transform.position.y, transform.position.z);
 		if (transform.position.x > startX + moveDistance || transform.position.x < startX ) {
 			speed *= -1.0f;
