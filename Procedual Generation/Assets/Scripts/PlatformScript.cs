@@ -70,4 +70,18 @@ public class PlatformScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	}
+
+	void OnCollisionEnter2D(Collision2D col)
+	{
+		if (col.gameObject.tag == "Player") {
+			col.transform.SetParent (transform);
+		}
+	}
+
+	void OnCollisionExit2D(Collision2D col)
+	{
+		if (col.gameObject.tag == "Player") {
+			col.transform.SetParent (null);
+		}
+	}
 }

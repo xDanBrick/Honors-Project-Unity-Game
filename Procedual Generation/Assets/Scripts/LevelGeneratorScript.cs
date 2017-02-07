@@ -56,6 +56,7 @@ public class LevelGeneratorScript : MonoBehaviour {
 			}
 		}
 	}
+
 	public void GenerateLevel()
 	{
 		//Sets the gap scaler

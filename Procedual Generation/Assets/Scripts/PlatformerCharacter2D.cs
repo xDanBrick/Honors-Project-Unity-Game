@@ -47,6 +47,7 @@ namespace UnityStandardAssets._2D
             // Set the vertical animation
             m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
 
+			// If the player goes lower than 
 			if (transform.position.y < -5.0f) {
 				StaticVariables.LoadLevel (StaticVariables.LevelNumber ());
 			}
@@ -114,5 +115,11 @@ namespace UnityStandardAssets._2D
             theScale.x *= -1;
             transform.localScale = theScale;
         }
+		void OnCollisionEnter2D(Collision2D col)
+		{
+			if (col.gameObject.tag == "Kill") {
+				StaticVariables.LoadLevel (StaticVariables.LevelNumber ());
+			}
+		}
     }
 }
