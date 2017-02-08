@@ -18,6 +18,9 @@ public class DisapearOnTouch : MonoBehaviour {
 			timer += Time.deltaTime;
 			//If there has been more than a second
 			if (timer > 1.0f) {
+				for (int i = 0; i < transform.childCount; i++) {
+					transform.GetChild (i).SetParent (null);
+				}
 				Destroy (gameObject);
 			}
 		}
