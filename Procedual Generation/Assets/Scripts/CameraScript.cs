@@ -13,6 +13,6 @@ public class CameraScript : MonoBehaviour {
 	void Update () {
 		
 		//Follow player
-		transform.position = new Vector3(player.transform.position.x, transform.position.y, transform.position.z);
+		transform.position = new Vector3(player.transform.position.x + 5.0f, transform.position.y, transform.position.z);
 	}
 }

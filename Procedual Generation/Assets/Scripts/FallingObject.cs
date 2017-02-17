@@ -15,4 +15,11 @@ public class FallingObject : MonoBehaviour {
 			GetComponent<Rigidbody2D> ().isKinematic = false;
 		}
 	}
+
+	void OnCollisionEnter2D(Collision2D col)
+	{
+		if (col.gameObject.tag == "Player") {
+
+		}
+	}
 }

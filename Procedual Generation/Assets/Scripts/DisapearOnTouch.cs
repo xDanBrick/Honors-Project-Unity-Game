@@ -7,7 +7,7 @@ public class DisapearOnTouch : MonoBehaviour {
 	bool collided = false;
 	// Use this for initialization
 	void Start () {
-		GetComponent<SpriteRenderer> ().color = Color.red;
+		GetComponent<SpriteRenderer> ().color = new Color(130, 0, 0);
 	}
 	
 	// Update is called once per frame

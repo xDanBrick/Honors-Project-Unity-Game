@@ -18,4 +18,16 @@ public class SelectScene : MonoBehaviour {
 	{
 		SceneManager.LoadScene (scene);
 	}
+
+	public void Quit()
+	{
+		Application.Quit ();
+	}
+
+	public void SelectDifficulty(int num)
+	{
+		string[] difficulty = new string[]{"Easy", "Medium", "Hard"};
+		MainLevelSelectData.difficuly = difficulty [num];
+		SceneManager.LoadScene (3);
+	}
 }

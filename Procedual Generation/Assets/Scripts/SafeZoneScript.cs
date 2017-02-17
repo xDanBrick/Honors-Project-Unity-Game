@@ -57,16 +57,17 @@ public class SafeZoneScript : MonoBehaviour {
 			if (zoneType == TYPE.END) 
 			{
 				//Takes the player back to the level select screen
-				SceneManager.LoadScene (0);
-				StaticVariables.levelCompleted [StaticVariables.LevelNumber()] = true;
+				MainLevelSelectData.levelCompleted[LevelData.levelNumber] = true;
+				SceneManager.LoadScene("LevelSelect");
+
 			} 
 			else 
 			{
 				//If the new spawn is further on than the last
-				if (transform.position.x > StaticVariables.spawnX)
+				if (transform.position.x > LevelData.spawnX)
 				{
 					//Sets the new spawn position
-					StaticVariables.spawnX = transform.position.x;
+					LevelData.spawnX = transform.position.x;
 				}
 			}
 		}

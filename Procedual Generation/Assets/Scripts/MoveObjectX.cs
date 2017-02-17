@@ -11,21 +11,17 @@ public class MoveObjectX : MonoBehaviour {
 		startX = transform.position.x;
 		moveDistance = 3.0f;
 		speed = 0.05f;
-
-	}
-
-	public void SetVariables(float seed, int difficulty)
-	{
-		moveDistance = 5.0f;
-		speed = 0.1f;
 	}
 
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		//Moves the platform right to left
-		transform.position = new Vector3 (transform.position.x + speed, transform.position.y, transform.position.z);
-		if (transform.position.x > startX + moveDistance || transform.position.x < startX ) {
+		if (transform.position.x > startX + moveDistance || transform.position.x < startX) {
 			speed *= -1.0f;
-		} 
+		}
+		GetComponent<Rigidbody2D> ().MovePosition(GetComponent<Rigidbody2D>().position + new Vector2 (speed, 0.0f));
+		if (transform.childCount > 0) {
+			//transform.GetChild(0).GetComponent<Rigidbody2D>().MovePosition(transform.GetChild(0).GetComponent<Rigidbody2D>().position + new Vector2(speed, 0.0f));
+		}
 	}
 }

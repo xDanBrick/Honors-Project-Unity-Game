@@ -20,6 +20,11 @@ namespace UnityStandardAssets._2D
         private Rigidbody2D m_Rigidbody2D;
         private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 
+		void Start()
+		{
+			transform.position = new Vector3 (LevelData.spawnX, transform.position.y);
+		}
+
         private void Awake()
         {
             // Setting up references.
@@ -49,19 +54,16 @@ namespace UnityStandardAssets._2D
 
 			// If the player goes lower than 
 			if (transform.position.y < -5.0f) {
-				StaticVariables.LoadLevel (StaticVariables.LevelNumber ());
+				LevelData.KillPlayer ();
 			}
         }
 
 
-        public void Move(float move, bool crouch, bool jump)
+        public void Move(float move, bool jump)
         {
             //only control the player if grounded or airControl is turned on
             if (m_Grounded || m_AirControl)
             {
-                // Reduce the speed if crouching by the crouchSpeed multiplier
-                move = (crouch ? move*m_CrouchSpeed : move);
-
                 // The Speed animator parameter is set to the absolute value of the horizontal input.
                 m_Anim.SetFloat("Speed", Mathf.Abs(move));
 
@@ -105,7 +107,7 @@ namespace UnityStandardAssets._2D
 		void OnCollisionEnter2D(Collision2D col)
 		{
 			if (col.gameObject.tag == "Kill") {
-				StaticVariables.LoadLevel (StaticVariables.LevelNumber ());
+				LevelData.KillPlayer ();
 			}
 		}
     }

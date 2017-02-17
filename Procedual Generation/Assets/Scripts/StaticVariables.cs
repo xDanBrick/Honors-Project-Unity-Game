@@ -2,19 +2,30 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class StaticVariables 
+public class MainLevelSelectData
 {
-	private static int levelNumber = 0;
-	public static float spawnX = -5.0f;
-	public static bool[] levelCompleted = new bool[5]{false, false, false, false, false};
+	public static string difficuly = "";
+	public static bool[] levelCompleted = new bool[50];
+}
+
+public class LevelData
+{
+	public static float timer = 0.0f;
+	public static float spawnX = 1.5f;
+	public static int deaths = 0;
 	public static int levelDifficulty = 1;
-	public static int LevelNumber()
+	public static int levelNumber = 1;
+
+	public static void KillPlayer()
 	{
-		return levelNumber;
+		deaths++;
+		SceneManager.LoadScene ("Main");
 	}
-	public static void LoadLevel(int num)
+
+	public static void ResetData()
 	{
-		SceneManager.LoadScene (1);
-		levelNumber = num;
+		deaths = 0;
+		timer = 0.0f;
+		spawnX = 1.5f;
 	}
 }
