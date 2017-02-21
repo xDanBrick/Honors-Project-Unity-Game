@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class SelectScene : MonoBehaviour {
+public class SCR_SelectScene : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

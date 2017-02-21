@@ -14,14 +14,15 @@ public class SCR_LevelNumber : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
 		
 	}
 
 	public void ChangePage(int increment)
 	{
 		pageNumber += increment;
-		pageMarker.transform.Translate (60 * increment, 0, 0);
+		pageMarker.transform.Translate (50 * increment, 0, 0);
 		SetLevelNumbers ();
 	}
 
@@ -53,7 +54,7 @@ public class SCR_LevelNumber : MonoBehaviour {
 
 		for (int i = 0; i < transform.childCount; i++) {
 			int levelNumber = (15 * pageNumber) + (i + 1);
-			transform.GetChild (i).transform.GetChild (0).GetComponent<Text> ().text = levelNumber.ToString ();
+			transform.GetChild (i).GetComponent<SCR_LevelButton> ().SetNumber (levelNumber);
 		}
 	}
 }

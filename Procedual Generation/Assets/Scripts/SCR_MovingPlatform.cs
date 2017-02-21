@@ -7,15 +7,15 @@ public class SCR_MovingPlatform : SCR_LevelChunk {
 	{
 		if (platformSeed > 3.0f && platformSeed < 5.0f) 
 		{
-			platform.AddComponent<MoveObjectX> ();
+			platform.AddComponent<SCR_MovePlatformX> ();
 		} 
 		else if (platformSeed > 5.0f && platformSeed < 7.0f)
 		{
-			platform.AddComponent<MoveObjectY> ();
+			platform.AddComponent<SCR_MovePlatformY> ();
 		} 
 		else if (platformSeed > 8.0f) 
 		{
-			platform.AddComponent<DisapearOnTouch> ();
+			platform.AddComponent<SCR_DisapearOnTouch> ();
 		} 
 	}
 }

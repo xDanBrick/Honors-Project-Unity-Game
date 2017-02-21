@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SCR_LevelChunk : MonoBehaviour {
+public class SCR_LevelChunk : SCR_Generator {
 
-	float seed = 0.0f;
-	int difficulty = 0;
-	protected float end = 0.0f;
 	private const float maxJumpWidth = 10.0f;
 	protected float currentX = 0.0f;
 	protected int platformCount = 0;
+	protected int gapCount = 0;
 	[SerializeField] int difficultyScaler = 0;
 	// Use this for initialization
 	void Start () {
@@ -23,37 +21,36 @@ public class SCR_LevelChunk : MonoBehaviour {
 	protected virtual void AddComponents(GameObject platform, float platformSeed){}
 	protected virtual void OnChunkCreate(){}
 
-	//Initialise the chunk
-	public void Initialise(float levelSeed, int chunkDifficulty, float chunkStart, float chunkEnd)
+	protected float EndPosition()
+	{
+		return transform.position.x + (scale.x * 0.5f);
+	}
+
+	protected override void Generate()
 	{
 		//Set variables
-		seed = Mathf.PerlinNoise (transform.position.x * levelSeed, 2.35f) * 10.0f;
-		difficulty = chunkDifficulty;
-		end = chunkEnd;
+		seed *= 10.0f;
 		OnChunkCreate ();
 
-		//Add Checkpoint to chunk
-		GameObject safeZone = GameObject.Find("Safe Zone");
-		GameObject zone = (GameObject)Instantiate (safeZone, new Vector3 (transform.position.x + (safeZone.transform.localScale.x * 0.5f), -3.0f, 0.0f), transform.rotation);
-		zone.GetComponent<SafeZoneScript> ().SetType (SafeZoneScript.TYPE.CHECKPOINT);
-		currentX = zone.transform.position.x + (zone.transform.localScale.x * 0.5f);
-
+		currentX = transform.position.x - (scale.x * 0.5f);
 
 		GameObject fallingObject = GameObject.Find ("Falling Object");
 		float fallingObjectSeed = Mathf.PerlinNoise (seed, seed);
 		for (int i = 0; i < Mathf.RoundToInt (fallingObjectSeed * 10.0f); i++) {
-			Instantiate (fallingObject, new Vector3 (transform.position.x + (transform.localScale.x * fallingObjectSeed) + (i * 2), fallingObject.transform.position.y), transform.rotation);
+			//Instantiate (fallingObject, new Vector3 (transform.position.x + (chunkScale.x * fallingObjectSeed) + (i * 2), fallingObject.transform.position.y), transform.rotation);
 		}
 
-		while (currentX < end) {
+		while (currentX < EndPosition()) {
 			//Add Platform
 			GeneratePlatform ();
 			//Add Gap
 			GenerateGap ();
-
 		}
+		Transform zone = GameObject.Find ("Kill Plane").transform;
+		Transform killZone = (Transform)Instantiate (zone, new Vector3 ( transform.position.x, transform.position.y-  (scale.y * 0.5f) + (zone.localScale.y * 0.5f)), transform.rotation);
+		killZone.localScale = new Vector3 (scale.x, 1.0f, 1.0f);
+		killZone.SetParent (transform);
 	}
-
 	//Generate a platform
 	void GeneratePlatform()
 	{
@@ -61,37 +58,41 @@ public class SCR_LevelChunk : MonoBehaviour {
 		platformCount++;
 
 		//Generate platform seed
-		float platformSeed = Mathf.PerlinNoise (platformCount * seed, 2.35f) * 10.0f;
+		float platformSeed = ProceduralGenerator.GenerateSeed(seed, platformCount) * 10.0f;
 
 		//Place Platform
-		GameObject newPlatform = (GameObject)Instantiate (GameObject.Find ("Platform"), new Vector3 (currentX, -3.0f, 0.0f), transform.rotation);
+		Transform platform = GameObject.Find ("Platform").transform;
+		Transform newPlatform = (Transform)Instantiate(platform, new Vector3 (currentX, (transform.position.y - 10) + (platform.localScale.y * 0.5f) + 1.0f) , transform.rotation);
 
 		//Sets the platform scaler
-		float platformScaler = 1.5f - (0.1f * difficulty);
+		float platformScaler = 1.5f - (0.1f * LevelData.levelDifficulty);
 
 		//Scales the platform
 		float size = platformSeed * platformScaler;
-		if (currentX + size < end) {
+		if (currentX + size < EndPosition()) {
 			//Adds an effect to the platform
-			AddComponents (newPlatform, platformSeed);
+			AddComponents (newPlatform.gameObject, platformSeed);
 		} 
 		else 
 		{
-			size -= (currentX + size) - end;
+			size -= (currentX + size) - EndPosition();
 		}
-		newPlatform.transform.localScale = (new Vector3 (size, 1.5f, 1.0f));
+		newPlatform.transform.localScale = (new Vector3 (size, 2.0f, 1.0f));
 		newPlatform.transform.Translate (new Vector3 (size * 0.5f, 0.0f, 0.0f));
+		newPlatform.transform.SetParent (transform);
 		currentX += size;
 	}
 
 	//Generates the gap between the platforms
 	void GenerateGap()
 	{
+		gapCount++;
+
 		//For the size of the grid
-		float gapScaler = 0.5f + (0.1f * difficulty);
+		float gapScaler = 0.5f + (0.1f * LevelData.levelDifficulty);
 
 		//Generate platform seed
-		float gapSeed = Mathf.PerlinNoise (currentX * seed, 2.35f) * 10.0f;
+		float gapSeed = ProceduralGenerator.GenerateSeed(seed, gapCount) * 10.0f;
 		float gapSize = gapSeed * gapScaler;
 
 		//If the gap is bigger than the max
@@ -106,9 +107,48 @@ public class SCR_LevelChunk : MonoBehaviour {
 		currentX += gapSize;
 	}
 
-	//Draws the box around the chunk in editor
-	void OnDrawGizmos()
+	protected bool AddMovePlatformX(GameObject platform, float platformSeed)
 	{
-		Gizmos.DrawWireCube (transform.position + (transform.localScale / 2), transform.localScale);
+		if (currentX + 4.5f < EndPosition()) 
+		{
+			platform.AddComponent<SCR_MovePlatformX> ();
+			currentX += 3.0f;
+			return true;
+		}
+		return false;
+	}
+
+	protected bool AddMovePlatformY(GameObject platform, float platformSeed)
+	{
+		platform.AddComponent<SCR_MovePlatformY> ().SetVariables(platformSeed);
+		return true;
+	}
+
+	protected bool AddDisapearingPlatform(GameObject platform, float platformSeed)
+	{
+		platform.AddComponent<SCR_DisapearOnTouch> ().SetVariables(platformSeed);
+		return true;
+	}
+
+	protected bool AddSpinningPlatform(GameObject platform, float platformSeed)
+	{
+		if (platformCount > 1) {
+			platform.AddComponent<SCR_RotatePlatform> ().SetVariables(platformSeed);
+			return true;
+		}
+		return false;
+	}
+
+	protected bool AddFadingPlatform(GameObject platform, float platformSeed)
+	{
+		platform.AddComponent<SCR_FadingPlatform> ().SetVariables(platformSeed);
+		return true;
+	}
+
+	protected bool AddBouncyPlatform(GameObject platform, float platformSeed)
+	{
+		platform.AddComponent<SCR_BouncyPlatform> ().SetVariables(platformSeed);
+		currentX += 5.0f;
+		return true;
 	}
 }

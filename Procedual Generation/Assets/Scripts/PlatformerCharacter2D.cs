@@ -23,16 +23,12 @@ namespace UnityStandardAssets._2D
 		void Start()
 		{
 			transform.position = new Vector3 (LevelData.spawnX, transform.position.y);
+			// Setting up references.
+			m_GroundCheck = transform.Find("GroundCheck");
+			m_CeilingCheck = transform.Find("CeilingCheck");
+			m_Anim = GetComponent<Animator>();
+			m_Rigidbody2D = GetComponent<Rigidbody2D>();
 		}
-
-        private void Awake()
-        {
-            // Setting up references.
-            m_GroundCheck = transform.Find("GroundCheck");
-            m_CeilingCheck = transform.Find("CeilingCheck");
-            m_Anim = GetComponent<Animator>();
-            m_Rigidbody2D = GetComponent<Rigidbody2D>();
-        }
 
 
         private void FixedUpdate()
@@ -51,11 +47,6 @@ namespace UnityStandardAssets._2D
 
             // Set the vertical animation
             m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
-
-			// If the player goes lower than 
-			if (transform.position.y < -5.0f) {
-				LevelData.KillPlayer ();
-			}
         }
 
 
@@ -64,6 +55,7 @@ namespace UnityStandardAssets._2D
             //only control the player if grounded or airControl is turned on
             if (m_Grounded || m_AirControl)
             {
+
                 // The Speed animator parameter is set to the absolute value of the horizontal input.
                 m_Anim.SetFloat("Speed", Mathf.Abs(move));
 
@@ -104,11 +96,5 @@ namespace UnityStandardAssets._2D
             theScale.x *= -1;
             transform.localScale = theScale;
         }
-		void OnCollisionEnter2D(Collision2D col)
-		{
-			if (col.gameObject.tag == "Kill") {
-				LevelData.KillPlayer ();
-			}
-		}
     }
 }

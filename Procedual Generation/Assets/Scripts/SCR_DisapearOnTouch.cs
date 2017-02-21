@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DisapearOnTouch : MonoBehaviour {
+public class SCR_DisapearOnTouch : SCR_PlatformComponent {
 
 	float timer = 0;
 	bool collided = false;
 	// Use this for initialization
 	void Start () {
-		GetComponent<SpriteRenderer> ().color = new Color(130, 0, 0);
+		GetComponent<SpriteRenderer> ().color = new Color(0.5f, 0.0f, 0.0f);
 	}
 	
 	// Update is called once per frame
