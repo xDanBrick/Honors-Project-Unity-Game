@@ -34,10 +34,10 @@ public class SCR_LevelChunk : SCR_Generator {
 
 		currentX = transform.position.x - (scale.x * 0.5f);
 
-		GameObject fallingObject = GameObject.Find ("Falling Object");
+		Transform fallingObject = GameObject.Find ("Falling Object").transform;
 		float fallingObjectSeed = Mathf.PerlinNoise (seed, seed);
 		for (int i = 0; i < Mathf.RoundToInt (fallingObjectSeed * 10.0f); i++) {
-			//Instantiate (fallingObject, new Vector3 (transform.position.x + (chunkScale.x * fallingObjectSeed) + (i * 2), fallingObject.transform.position.y), transform.rotation);
+			Instantiate (fallingObject, new Vector3 (transform.position.x + (2.0f * i), transform.position.y - (scale.y * 0.5f) - fallingObject.localScale.y), transform.rotation);
 		}
 
 		while (currentX < EndPosition()) {

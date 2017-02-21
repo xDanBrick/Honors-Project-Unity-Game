@@ -21,7 +21,7 @@ public class SCR_MoveYOnContact : SCR_PlatformComponent {
 		if (col.gameObject.tag == "Player") 
 		{
 			if (transform.position.y >= 20.0f + (transform.localScale.y * 0.5f)) {
-				GetComponent<Rigidbody2D> ().velocity = new Vector3 (0.0f, 0.0f);
+				//GetComponent<Rigidbody2D> ().velocity = new Vector3 (0.0f, 0.0f);
 				return;
 			}
 			onPlatform = true;

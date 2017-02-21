@@ -11,7 +11,7 @@ public class MainLevelSelectData
 public class LevelData
 {
 	public static float timer = 0.0f;
-	public static float spawnX = -50.0f;
+	public static Vector3 spawnPoint = new Vector3(-50.0f, -15.0f);
 	public static int deaths = 0;
 	public static int levelDifficulty = 1;
 	public static int levelNumber = 1;
@@ -27,14 +27,13 @@ public class LevelData
 	{
 		deaths = 0;
 		timer = 0.0f;
-		spawnX = -50.0f;
+		spawnPoint = new Vector3(-50.0f, -15.0f);
 	}
 }
 
 public class PlayerData
 {
 	public static bool isOnLift = false;
-
 }
 
 public class ProceduralGenerator

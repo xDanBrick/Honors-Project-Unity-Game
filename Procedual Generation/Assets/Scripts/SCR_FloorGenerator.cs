@@ -34,16 +34,14 @@ public class SCR_FloorGenerator : SCR_Generator {
 		GameObject backgrounds = new GameObject ("Backgrounds");
 		backgrounds.transform.SetParent (transform);
 		Transform background = GameObject.Find ("Background").transform;
-		for (int i = 0; i < (scale.x / 35.0f) - 1; i++) {
-			Transform backgroundCopy = (Transform)Instantiate(background, new Vector3((transform.position.x - (scale.x * 0.5f)) + (background.localScale.x * 2.0f) + (35.0f * i), transform.position.y), transform.rotation);
+		for (int i = 0; i < (scale.x / 50.0f); i++) {
+			Transform backgroundCopy = (Transform)Instantiate(background, new Vector3(GetLeftEdge() + (35.5f * i) + (edge.localScale.x * 1.5f), transform.position.y), transform.rotation);
 			backgroundCopy.SetParent (backgrounds.transform);
 		}
 
 		//Add Left Edge
-		GenerateEdge (transform.position.x - (scale.x * 0.5f) + (edge.localScale.x * 0.5f));
-
-		//Add Right Edge
-		GenerateEdge ((scale.x * 0.5f) -  (edge.localScale.x * 0.5f) );
+		GenerateEdge (new Vector3(GetLeftEdge() + (edge.localScale.x * 0.5f), transform.position.y), edge.localScale);
+		GenerateEdge (new Vector3(GetRightEdge() - (edge.localScale.x * 0.5f), transform.position.y), edge.localScale);
 
 		//Add Chunks
 		int chunkCount = 2;
@@ -77,6 +75,19 @@ public class SCR_FloorGenerator : SCR_Generator {
 
 		//Add checkpoint
 		GenerateZone(transform.position.x + (scale.x * 0.5f) - edge.localScale.x - (safeZone.localScale.x * 0.5f), endType);
+
+		float topEdgeX = transform.position.x + (safeZone.localScale.x * 0.5f);
+		float topEdgeSize = scale.x - safeZone.localScale.x - (edge.localScale.x * 2.0f);
+
+		if (startType == SCR_SafeZone.TYPE.CHECKPOINT || startType == SCR_SafeZone.TYPE.ELEVATOR_END
+			|| startType == SCR_SafeZone.TYPE.START) {
+			topEdgeX = transform.position.x - (safeZone.localScale.x * 0.5f);
+		}
+		if (startType == SCR_SafeZone.TYPE.END || endType == SCR_SafeZone.TYPE.END) {
+			topEdgeSize = scale.x - (edge.localScale.x * 2.0f);
+			topEdgeX = transform.position.x;
+		}
+		GenerateEdge (new Vector3(topEdgeX, GetTopEdge() - (3.0f)), new Vector3(topEdgeSize, 6.0f));
 	}
 
 	private void GenerateZone(float x, SCR_SafeZone.TYPE type)
@@ -86,8 +97,9 @@ public class SCR_FloorGenerator : SCR_Generator {
 		zone.SetParent (transform);
 	}
 
-	private void GenerateEdge (float x)
+	private void GenerateEdge (Vector3 position, Vector3 size)
 	{
-		Instantiate (edge, new Vector3 (x, transform.position.y), transform.rotation);
+		Transform newEdge = (Transform)Instantiate (edge, position, transform.rotation);
+		newEdge.localScale = size;
 	}
 }

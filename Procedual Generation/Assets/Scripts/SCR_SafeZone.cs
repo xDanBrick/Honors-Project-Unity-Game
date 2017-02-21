@@ -4,8 +4,8 @@ using UnityEngine.SceneManagement;
 
 public class SCR_SafeZone : MonoBehaviour {
 
-	public enum TYPE{CHECKPOINT, END, ELEVATOR, ELEVATOR_END};
-	private TYPE zoneType;
+	public enum TYPE{START, CHECKPOINT, END, ELEVATOR, ELEVATOR_END};
+	[SerializeField]private TYPE zoneType;
 	// Use this for initialization
 	void Start () {
 	}
@@ -18,6 +18,10 @@ public class SCR_SafeZone : MonoBehaviour {
 	public void SetType(TYPE type)
 	{
 		zoneType = type;
+		if (type == TYPE.START) {
+			GameObject.FindGameObjectWithTag ("Player").transform.position = transform.position;
+			LevelData.floorPosition = transform.GetChild(0).position.y;
+		}
 		if (type == TYPE.ELEVATOR) {
 			gameObject.AddComponent<SCR_MoveYOnContact> ();
 		}
@@ -40,10 +44,10 @@ public class SCR_SafeZone : MonoBehaviour {
 			{
 				GetComponent<SpriteRenderer> ().color = Color.yellow;
 				//If the new spawn is further on than the last
-				if (transform.position.x > LevelData.spawnX)
+				if (transform.position.x > LevelData.spawnPoint.x || transform.position.y > LevelData.spawnPoint.y)
 				{
 					//Sets the new spawn position
-					LevelData.spawnX = transform.position.x;
+					LevelData.spawnPoint = transform.position;
 				}
 			}
 		}

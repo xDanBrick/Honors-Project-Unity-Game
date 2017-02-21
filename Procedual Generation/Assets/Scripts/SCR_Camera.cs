@@ -19,6 +19,6 @@ public class SCR_Camera : MonoBehaviour {
 
 		}
 		//Follow player
-		transform.position = new Vector3 (player.position.x + 5.0f, LevelData.floorPosition + 8.5f - 20.0f, transform.position.z);
+		transform.position = new Vector3 (player.position.x + 5.0f, LevelData.floorPosition + 7.0f, -10.0f);
 	}
 }

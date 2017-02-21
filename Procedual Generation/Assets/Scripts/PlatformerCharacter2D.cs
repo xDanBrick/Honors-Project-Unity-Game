@@ -22,7 +22,7 @@ namespace UnityStandardAssets._2D
 
 		void Start()
 		{
-			transform.position = new Vector3 (LevelData.spawnX, transform.position.y);
+			transform.position = LevelData.spawnPoint;
 			// Setting up references.
 			m_GroundCheck = transform.Find("GroundCheck");
 			m_CeilingCheck = transform.Find("CeilingCheck");
