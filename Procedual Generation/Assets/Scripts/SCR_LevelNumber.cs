@@ -22,7 +22,6 @@ public class SCR_LevelNumber : MonoBehaviour {
 	public void ChangePage(int increment)
 	{
 		pageNumber += increment;
-		pageMarker.transform.Translate (50 * increment, 0, 0);
 		SetLevelNumbers ();
 	}
 

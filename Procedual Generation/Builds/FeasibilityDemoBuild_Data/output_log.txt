@@ -16,31 +16,9 @@ Platform assembly: C:\Users\Daniel\Desktop\BackupPC\Unistuff\Unistuff\4th Year\H
 Loading C:\Users\Daniel\Desktop\BackupPC\Unistuff\Unistuff\4th Year\Honors Project\Programmes\Procedual_Generation\Procedual_Generation_Repository\Procedual Generation\Builds\FeasibilityDemoBuild_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Users\Daniel\Desktop\BackupPC\Unistuff\Unistuff\4th Year\Honors Project\Programmes\Procedual_Generation\Procedual_Generation_Repository\Procedual Generation\Builds\FeasibilityDemoBuild_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading C:\Users\Daniel\Desktop\BackupPC\Unistuff\Unistuff\4th Year\Honors Project\Programmes\Procedual_Generation\Procedual_Generation_Repository\Procedual Generation\Builds\FeasibilityDemoBuild_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.062 seconds
+- Completed reload, in  0.217 seconds
 Platform assembly: C:\Users\Daniel\Desktop\BackupPC\Unistuff\Unistuff\4th Year\Honors Project\Programmes\Procedual_Generation\Procedual_Generation_Repository\Procedual Generation\Builds\FeasibilityDemoBuild_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\Daniel\Desktop\BackupPC\Unistuff\Unistuff\4th Year\Honors Project\Programmes\Procedual_Generation\Procedual_Generation_Repository\Procedual Generation\Builds\FeasibilityDemoBuild_Data\Managed\System.dll (this message is harmless)
 desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
-<RI> Initialized touch support.
-UnloadTime: 0.759479 ms
-Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 5.621379 ms
-
-Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 347.
-Total: 0.238928 ms (FindLiveObjects: 0.043926 ms CreateObjectMapping: 0.034484 ms MarkObjects: 0.150253 ms  DeleteObjects: 0.009442 ms)
-
-Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 0.993481 ms
-
-Unloading 118 unused Assets to reduce memory usage. Loaded Objects now: 422.
-Total: 1.068608 ms (FindLiveObjects: 0.062400 ms CreateObjectMapping: 0.051316 ms MarkObjects: 0.756605 ms  DeleteObjects: 0.196643 ms)
-
-Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 2.719757 ms
-
-Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 422.
-Total: 0.816132 ms (FindLiveObjects: 0.037768 ms CreateObjectMapping: 0.032842 ms MarkObjects: 0.736079 ms  DeleteObjects: 0.008210 ms)
-
-Setting up 1 worker threads for Enlighten.
-  Thread -> id: 2ae8 -> priority: 1 

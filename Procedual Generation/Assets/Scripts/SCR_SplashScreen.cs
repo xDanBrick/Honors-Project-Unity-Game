@@ -15,7 +15,7 @@ public class SCR_SplashScreen : MonoBehaviour {
 	void Update () {
 		timer += Time.deltaTime;
 		if (timer > changeTime) {
-			SceneManager.LoadScene (1);
+			SceneManager.LoadScene ("SCN_MainMenu");
 		}
 	}
 }

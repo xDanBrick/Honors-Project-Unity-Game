@@ -6,8 +6,8 @@ public class SCR_ChaosChunk : SCR_LevelChunk {
 	protected override void AddComponents(GameObject platform, float platformSeed)
 	{
 		bool[] componentAdded = new bool[3];
-		float componentSeed = Mathf.PerlinNoise (platformSeed, 2.35f) * 10.0f;
-		int increment = 0;
+		float componentSeed = Mathf.PerlinNoise (platformSeed, platformSeed) * 10.0f;
+		Debug.Log (componentSeed);
 
 		//while(componentSeed > 3.0f)
 		//{

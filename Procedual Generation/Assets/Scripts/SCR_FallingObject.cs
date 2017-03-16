@@ -13,7 +13,7 @@ public class SCR_FallingObject : MonoBehaviour {
 	void Update () {
 		if (player.position.x + 2 > transform.position.x) {
 			GetComponent<Rigidbody2D> ().isKinematic = false;
-			GetComponent<Rigidbody2D> ().velocity = new Vector2 (0.0f, -10.0f);
+			GetComponent<Rigidbody2D> ().velocity = new Vector2 (0.0f, -5.0f);
 		}
 	}
 

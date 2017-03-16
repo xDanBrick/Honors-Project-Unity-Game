@@ -3,7 +3,6 @@ using System.Collections;
 
 public class SCR_Generator : MonoBehaviour {
 
-
 	protected Vector3 scale;
 	protected float seed = 0.0f;
 

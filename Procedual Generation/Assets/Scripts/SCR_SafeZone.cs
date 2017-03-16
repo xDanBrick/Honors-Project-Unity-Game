@@ -4,8 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class SCR_SafeZone : MonoBehaviour {
 
-	public enum TYPE{START, CHECKPOINT, END, ELEVATOR, ELEVATOR_END};
+	public enum TYPE{START, CHECKPOINT, END, ELEVATOR, ELEVATOR_END, NONE};
 	[SerializeField]private TYPE zoneType;
+	int checkPointNumber = 0;
 	// Use this for initialization
 	void Start () {
 	}
@@ -18,14 +19,25 @@ public class SCR_SafeZone : MonoBehaviour {
 	public void SetType(TYPE type)
 	{
 		zoneType = type;
-		if (type == TYPE.START) {
+		checkPointNumber = LevelData.checkPointCount;
+		LevelData.checkPointCount++;
+		if (LevelData.currentCheckPoint == checkPointNumber) 
+		{
+			if (type == TYPE.ELEVATOR) {
+				transform.Translate (0.0f, 20.0f, 0.0f);
+				type = TYPE.NONE;
+			}
 			GameObject.FindGameObjectWithTag ("Player").transform.position = transform.position;
 			LevelData.floorPosition = transform.GetChild(0).position.y;
 		}
 		if (type == TYPE.ELEVATOR) {
-			gameObject.AddComponent<SCR_MoveYOnContact> ();
+			transform.GetChild(0).gameObject.AddComponent<SCR_MoveYOnContact> ();
 		}
 		if (type == TYPE.ELEVATOR_END) {
+			Destroy (gameObject);
+		}
+		if (type == TYPE.CHECKPOINT) {
+			transform.GetChild (0).SetParent (null);
 			Destroy (gameObject);
 		}
 	}
@@ -38,17 +50,18 @@ public class SCR_SafeZone : MonoBehaviour {
 			{
 				//Takes the player back to the level select screen
 				MainLevelSelectData.levelCompleted[LevelData.levelNumber] = true;
-				SceneManager.LoadScene("LevelSelect");
+				SceneManager.LoadScene(LevelData.levelSelectName);
+				GameObject.Find ("MenuMusic").GetComponent<AudioSource> ().Play ();
+				GameObject.Find ("MainMusic").GetComponent<AudioSource> ().Stop ();
 			} 
-			else 
+			else
 			{
 				GetComponent<SpriteRenderer> ().color = Color.yellow;
 				//If the new spawn is further on than the last
-				if (transform.position.x > LevelData.spawnPoint.x || transform.position.y > LevelData.spawnPoint.y)
-				{
-					//Sets the new spawn position
-					LevelData.spawnPoint = transform.position;
+				if (zoneType != TYPE.CHECKPOINT) {
+					LevelData.currentCheckPoint = checkPointNumber;
 				}
+
 			}
 		}
 	}

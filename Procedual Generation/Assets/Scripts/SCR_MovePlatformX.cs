@@ -4,16 +4,20 @@ using System.Collections;
 public class SCR_MovePlatformX : SCR_PlatformComponent {
 
 	private float startX = 0.0f;
-	private float moveDistance = 0.0f;
-	float speed = 0.0f;
+	[SerializeField][Range(1.0f, 5.0f)] float moveDistance = 2.0f;
+	[SerializeField][Range(0.03f, 0.7f)] float speed = 0.05f;
 	float delay = 0.0f;
 	float timer = 0.0f;
+
+	void Start()
+	{
+		startX = transform.position.x;
+	}
 
 	protected override void InitVariables(){
 		startX = transform.position.x;
 		delay += (7.5f / seed);
-		moveDistance = 3.0f;
-		speed = 0.05f;
+		moveDistance = 2.0f;
 	}
 
 	// Update is called once per frame

@@ -9,18 +9,13 @@ public class SCR_FloorGenerator : SCR_Generator {
 	float size = 0.0f;
 	GameObject backgroundsParent;
 
-	void Start()
-	{
-		
-	}
-
 	private GameObject GenerateChunk(Vector2 position, Vector2 size)
 	{
 		chunkCounter++;
 		GameObject chunk = new GameObject ("Chunk " + chunkCounter.ToString());
 		SCR_LevelChunk levelChunk = (SCR_ChaosChunk)chunk.AddComponent<SCR_ChaosChunk>();
 
-		float chunkSeed = ProceduralGenerator.GenerateSeed (seed, chunkCounter);
+		float chunkSeed = ProceduralGenerator.GenerateSeed (seed * ((float)chunkCounter * 0.972674f), chunkCounter);
 		levelChunk.GenerateProcedurally (chunkSeed, new Vector3 (position.x, position.y), new Vector3 (size.x, size.y));
 		levelChunk.transform.SetParent (transform);
 		return chunk;
@@ -34,13 +29,14 @@ public class SCR_FloorGenerator : SCR_Generator {
 		GameObject backgrounds = new GameObject ("Backgrounds");
 		backgrounds.transform.SetParent (transform);
 		Transform background = GameObject.Find ("Background").transform;
-		for (int i = 0; i < (scale.x / 50.0f); i++) {
+		for (int i = 0; i < (scale.x / 45.0f); i++) {
 			Transform backgroundCopy = (Transform)Instantiate(background, new Vector3(GetLeftEdge() + (35.5f * i) + (edge.localScale.x * 1.5f), transform.position.y), transform.rotation);
 			backgroundCopy.SetParent (backgrounds.transform);
 		}
-
 		//Add Left Edge
 		GenerateEdge (new Vector3(GetLeftEdge() + (edge.localScale.x * 0.5f), transform.position.y), edge.localScale);
+
+		//Right Edge
 		GenerateEdge (new Vector3(GetRightEdge() - (edge.localScale.x * 0.5f), transform.position.y), edge.localScale);
 
 		//Add Chunks
@@ -101,5 +97,6 @@ public class SCR_FloorGenerator : SCR_Generator {
 	{
 		Transform newEdge = (Transform)Instantiate (edge, position, transform.rotation);
 		newEdge.localScale = size;
+		newEdge.SetParent (transform);
 	}
 }

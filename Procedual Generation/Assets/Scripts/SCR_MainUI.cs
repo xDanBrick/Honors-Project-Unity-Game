@@ -9,7 +9,7 @@ public class SCR_MainUI : MonoBehaviour {
 	void Start () {
 		timerText = GameObject.Find ("Timer").GetComponent<Text> ();
 		deathCounterText = GameObject.Find ("Deaths").GetComponent<Text> ();
-		GameObject.Find ("Level").GetComponent<Text> ().text = "Level " + LevelData.levelNumber;
+
 	}
 	
 	// Update is called once per frame
